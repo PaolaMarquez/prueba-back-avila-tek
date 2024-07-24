@@ -11,6 +11,7 @@ import { swaggerPlugin } from './plugins/swagger';
 import { handleError } from './utils/error/handler';
 import { authRouter } from '@/components/auth/auth.routes';
 import { userRouter } from '@/components/users/user.routes';
+import { authMidd } from '@/middlewares/auth';
 
 global.XMLHttpRequest = xhr2;
 
@@ -73,6 +74,7 @@ export async function createServer() {
 
   await server.register(authRouter);
   await server.register(userRouter);
+  server.addHook("preHandler", authMidd.auth)
 
   await server.ready();
   return server;
