@@ -25,6 +25,10 @@ export const userSchema = new Schema<IUser, UserDocument>(
       type: String,
       required: [true, ''],
     },
+    isAdmin: {
+      type: Boolean,
+      required: [true, ''],
+    },
   },
   { timestamps: true }
 );

@@ -13,4 +13,5 @@ export const userDefinition = z.object({
   createdAt: z.string().datetime().or(z.date()).nullable().optional(),
   updatedAt: z.string().datetime().or(z.date()).nullable().optional(),
   phone: phoneDefinition.optional(),
+  isAdmin: z.boolean(),
 });
