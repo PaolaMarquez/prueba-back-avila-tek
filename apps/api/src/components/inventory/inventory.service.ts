@@ -1,6 +1,6 @@
 import { FastifyReply } from "fastify";
 import { Product } from '@/components/inventory/inventory.model';
-import { productInput } from "@avila-tek/models";
+import { productInput, productSchema } from "@avila-tek/models";
 
 
 async function createProduct(data: productInput, res: FastifyReply){
@@ -34,8 +34,6 @@ async function createProduct(data: productInput, res: FastifyReply){
 async function deleteProduct(id: string, res: FastifyReply){
   try {
     const product = await Product.findByIdAndDelete(id)
-    console.log("PRODUCTO: ", product)
-    console.log("ID: ", id)
     if (!product){
       return res.status(400).send({error: "Product doesn't exists"});
     }
@@ -45,7 +43,62 @@ async function deleteProduct(id: string, res: FastifyReply){
   }
 }
 
+async function updateProduct(id: string, data: any, res: FastifyReply){
+  try {
+    const product = await Product.findByIdAndUpdate(id, data)
+    if (!product){
+      return res.status(400).send({error: "Product doesn't exists"});
+    }
+    res.status(200).send("Product updated successfully");
+  } catch (error) {
+    res.status(500).send({error: "Server error"});
+  }
+
+}
+
+async function findProduct(id: string, res: FastifyReply){
+  try {
+    const product = await Product.findById(id)
+    if (!product){
+      return res.status(400).send({error: "Product doesn't exists"});
+    }
+    return {
+      product
+    }
+  } catch (error) {
+    res.status(500).send({error: "Server error"});
+  }
+}
+
+async function findAllProducts(res: FastifyReply){
+  try {
+    const products = await Product.find()
+    if (products.length === 0){
+      res.status(400).send("There are no products registered")
+    }
+    return products
+  } catch (error) {
+    res.status(500).send({error: "Server error"});
+  }
+}
+
+async function findAvailableProducts(res: FastifyReply){
+  try {
+    const products = await Product.find({ stock: { $gt: 0 } })
+    if (products.length === 0){
+      res.status(400).send("There are no products available")
+    }
+    return products
+  } catch (error) {
+    res.status(500).send({error: "Server error"});
+  }
+}
+
 export const inventoryService = Object.freeze({
     createProduct,
     deleteProduct,
+    updateProduct,
+    findProduct,
+    findAllProducts,
+    findAvailableProducts
   });
