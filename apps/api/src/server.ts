@@ -12,6 +12,7 @@ import { handleError } from './utils/error/handler';
 import { authRouter } from '@/components/auth/auth.routes';
 import { userRouter } from '@/components/users/user.routes';
 import { authMidd } from '@/middlewares/auth';
+import { inventoryRouter } from '@/components/inventory/inventory.routes';
 
 global.XMLHttpRequest = xhr2;
 
@@ -74,6 +75,7 @@ export async function createServer() {
 
   await server.register(authRouter);
   await server.register(userRouter);
+  await server.register(inventoryRouter);
   server.addHook("preHandler", authMidd.auth)
 
   await server.ready();
