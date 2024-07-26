@@ -34,6 +34,7 @@ async function register(data: TSignInInput, res: FastifyReply){
         password: data.password,
         createdAt: new Date(),
         updatedAt: new Date(),
+        isAdmin: data.isAdmin
       }
     )
   const newUser = await user.save();
@@ -41,9 +42,9 @@ async function register(data: TSignInInput, res: FastifyReply){
   const payload = {
     user: {
       _id: newUser._id,
+      isAdmin: newUser.isAdmin,
     }
   }
-
 
   const token = jwt.sign(payload, process.env.JWT_SECRET!, {
     expiresIn: "1hr",
@@ -53,6 +54,7 @@ async function register(data: TSignInInput, res: FastifyReply){
         user,
         token,
       };
+
   } catch (error) {
     console.log(error)
     res.status(500).send({error: "Server error"});
@@ -73,6 +75,7 @@ async function login(data: TSignInInput, res: FastifyReply){
     const payload = {
       user: {
         _id: user._id,
+        isAdmin: user.isAdmin
       }
     }
     const token = jwt.sign(payload, process.env.JWT_SECRET!, 

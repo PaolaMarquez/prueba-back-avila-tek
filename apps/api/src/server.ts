@@ -1,4 +1,4 @@
-import Fastify from 'fastify';
+import Fastify, { FastifyReply, FastifyRequest } from 'fastify';
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import rateLimit from '@fastify/rate-limit';
@@ -11,7 +11,7 @@ import { swaggerPlugin } from './plugins/swagger';
 import { handleError } from './utils/error/handler';
 import { authRouter } from '@/components/auth/auth.routes';
 import { userRouter } from '@/components/users/user.routes';
-import { authMidd } from '@/middlewares/auth';
+import { verifyMidd } from '@/middlewares/verifyToken';
 import { inventoryRouter } from '@/components/inventory/inventory.routes';
 
 global.XMLHttpRequest = xhr2;
@@ -62,7 +62,9 @@ export async function createServer() {
   }
 
   // routes
-  // await server.register(userRoutes, { prefix: '/api' });
+  await server.register(inventoryRouter, { prefix: process.env.API_PREFIX as string + '/inventory' });
+  await server.register(authRouter, { prefix: process.env.API_PREFIX as string + '/auth' });
+  await server.register(userRouter, { prefix: process.env.API_PREFIX as string});
 
   await server.register(cors, {
     origin: JSON.parse(process.env.CORS_ORIGINS ?? '["*"]'),
@@ -76,7 +78,7 @@ export async function createServer() {
   await server.register(authRouter);
   await server.register(userRouter);
   await server.register(inventoryRouter);
-  server.addHook("preHandler", authMidd.auth)
+  // server.addHook("preHandler", verifyMidd.auth)
 
   await server.ready();
   return server;

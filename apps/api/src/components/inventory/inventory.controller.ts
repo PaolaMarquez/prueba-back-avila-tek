@@ -43,6 +43,7 @@ async function findAvailableProducts(
 ) {
   return inventoryService.findAvailableProducts(reply);
 }
+
 export const inventoryController = Object.freeze({ 
   createProduct, 
   deleteProduct, 
