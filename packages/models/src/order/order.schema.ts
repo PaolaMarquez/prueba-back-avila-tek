@@ -18,11 +18,6 @@ export const orderSchema = new Schema<IOrder, OrderDocument>(
       required: [true, ''],
       trim: true,
     },
-    subtotal: {
-      type: Number,
-      required: [true, ''],
-      trim: true,
-    },
     total: {
       type: Number,
       required: [true, ''],

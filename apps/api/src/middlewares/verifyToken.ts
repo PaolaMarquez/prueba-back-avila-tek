@@ -19,12 +19,12 @@ async function verifyToken(request: FastifyRequest<{ Body: any , Params: any}>, 
     }
 }
 
-async function verifyTokenAndAuthorization(request: FastifyRequest<{ Body: any , Params: any}>, reply: FastifyReply){
+async function verifyTokenAndAuthorization(request: FastifyRequest<{ Body: any , Params: { id: string }}>, reply: FastifyReply){
     await verifyToken(request, reply)
     try {
         const user = request.user
         console.log(user)
-        if (user.isAdmin) {
+        if (user.isAdmin || user._id === request.params.id) {
             return;
           } else {
             return reply.code(401).send({ error: "Unauthorized" })

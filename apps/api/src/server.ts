@@ -13,7 +13,7 @@ import { authRouter } from '@/components/auth/auth.routes';
 import { userRouter } from '@/components/users/user.routes';
 import { verifyMidd } from '@/middlewares/verifyToken';
 import { inventoryRouter } from '@/components/inventory/inventory.routes';
-import { ordersRouter } from '@/components/orders/orders.routes';
+import { orderRouter } from '@/components/orders/order.routes';
 
 global.XMLHttpRequest = xhr2;
 
@@ -66,7 +66,7 @@ export async function createServer() {
   await server.register(inventoryRouter, { prefix: process.env.API_PREFIX as string + '/inventory' });
   await server.register(authRouter, { prefix: process.env.API_PREFIX as string + '/auth' });
   await server.register(userRouter, { prefix: process.env.API_PREFIX as string});
-  await server.register(ordersRouter, { prefix: process.env.API_PREFIX as string + '/orders'});
+  await server.register(orderRouter, { prefix: process.env.API_PREFIX as string + '/orders'});
 
   await server.register(cors, {
     origin: JSON.parse(process.env.CORS_ORIGINS ?? '["*"]'),
@@ -80,7 +80,7 @@ export async function createServer() {
   await server.register(authRouter);
   await server.register(userRouter);
   await server.register(inventoryRouter);
-  await server.register(ordersRouter);
+  await server.register(orderRouter);
   // server.addHook("preHandler", verifyMidd.auth)
 
   await server.ready();
