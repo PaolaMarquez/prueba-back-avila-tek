@@ -1,9 +1,10 @@
 import { FastifyReply } from "fastify";
 import { Product } from '@/components/inventory/inventory.model';
-import { productInput, productSchema } from "@avila-tek/models";
+import { ProductInput } from "@avila-tek/models";
+import { ProductUpdate } from "@/types/types";
 
 
-async function createProduct(data: productInput, res: FastifyReply){
+async function createProduct(data: ProductInput, res: FastifyReply){
     try {
       let product = await Product.findOne({name: data.name})
       if (product){
@@ -26,7 +27,6 @@ async function createProduct(data: productInput, res: FastifyReply){
           product,
         };
     } catch (error) {
-      console.log(error)
       res.status(500).send({error: "Server error"});
     }
 }
@@ -43,7 +43,7 @@ async function deleteProduct(id: string, res: FastifyReply){
   }
 }
 
-async function updateProduct(id: string, data: any, res: FastifyReply){
+async function updateProduct(id: string, data: ProductUpdate, res: FastifyReply){
   try {
     const product = await Product.findByIdAndUpdate(id, data)
     if (!product){

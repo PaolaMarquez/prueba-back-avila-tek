@@ -6,9 +6,12 @@ export async function orderRouter(
   fastify: FastifyInstance,
   options?: FastifyPluginOptions
 ) {
-  fastify.post('/', {preHandler: verifyMidd.verifyTokenAndAuthorization }, orderController.createOrder);
+  fastify.post('/', {preHandler: verifyMidd.verifyToken }, orderController.createOrder);
   fastify.delete('/:id', {preHandler: verifyMidd.verifyTokenAndAuthorization }, orderController.deleteOrder);
-  fastify.get('/:id', {preHandler: verifyMidd.verifyToken }, orderController.findOrder);
-  fastify.get('/', {preHandler: verifyMidd.verifyToken }, orderController.findAllOrders);
+  fastify.get('/orders/:id', {preHandler: verifyMidd.verifyTokenAndAuthorization }, orderController.findOrder);
+  fastify.get('/:userId/:id', {preHandler: verifyMidd.verifyTokenAndAuthorization }, orderController.findOrder);
+  fastify.get('/', {preHandler: verifyMidd.verifyTokenAndAuthorization }, orderController.findAllOrders);
+  fastify.get('/:id', {preHandler: verifyMidd.verifyTokenAndAuthorization }, orderController.findOrdersByUsers);
+  fastify.get('/status', {preHandler: verifyMidd.verifyTokenAndAuthorization }, orderController.findOrdersByUsers);
   fastify.put('/status/:id', {preHandler: verifyMidd.verifyTokenAndAuthorization }, orderController.updateStatus);
 }

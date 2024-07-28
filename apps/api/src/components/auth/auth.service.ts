@@ -64,11 +64,11 @@ async function login(data: TSignInInput, res: FastifyReply){
   try {
     const user = await User.findOne({email: data.email})
     if (!user){
-      return res.status(400).send({error: "Invalid credentials 1"});
+      return res.status(400).send({error: "Invalid credentials"});
     }
     const isMatch = await argon2.verify(user.password!, data.password);
     if (!isMatch){
-      return res.status(400).send({error: "Invalid credentials 2"})
+      return res.status(400).send({error: "Invalid credentials"})
     }
 
     const payload = {
@@ -88,7 +88,6 @@ async function login(data: TSignInInput, res: FastifyReply){
     }
 
   } catch (error) {
-    console.log(error)
     res.status(500).send({error: "Server error"});
   }
   

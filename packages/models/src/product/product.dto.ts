@@ -10,4 +10,4 @@ export const productDefinition = z.object({
   updatedAt: z.string().datetime().or(z.date()).nullable().optional(),
 });
 
-export type productInput = z.infer<typeof productDefinition>;
+export type ProductInput = z.infer<typeof productDefinition>;

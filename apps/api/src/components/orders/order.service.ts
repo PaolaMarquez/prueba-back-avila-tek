@@ -2,6 +2,7 @@ import { FastifyReply } from "fastify";
 import { Order } from "./order.model";
 import { OrderStatus } from "@/types/types";
 import { OrderInput } from "@avila-tek/models";
+import { User } from "../users/user.model";
 
 async function createOrder(data: OrderInput, res: FastifyReply){
     try {
@@ -73,10 +74,34 @@ async function updateStatus(id: string, status: OrderStatus, res: FastifyReply){
 
 }
 
+async function findOrdersByUsers(id:string, res: FastifyReply){
+  try {
+    const user = User.findById(id);
+    if (!user) res.status(400).send({error: "This user doesn't exist"});
+    const orders = Order.find({user: id})
+    if (!orders) res.status(400).send({error: "This user has no orders"});
+    return orders;
+  } catch (error) {
+    res.status(500).send({error: "Server error"});
+  }
+}
+
+async function findOrdersByStatus(status: OrderStatus, res: FastifyReply){
+  try {
+    const orders = Order.find({status: status})
+    if (!orders) res.status(400).send({error: "There are no orders with this status"});
+    return orders;
+  } catch (error) {
+    res.status(500).send({error: "Server error"});
+  }
+}
+
 export const orderService = Object.freeze({
     createOrder,
     deleteOrder,
     findOrder,
     findAllOrders,
     updateStatus,
+    findOrdersByUsers,
+    findOrdersByStatus,
   });

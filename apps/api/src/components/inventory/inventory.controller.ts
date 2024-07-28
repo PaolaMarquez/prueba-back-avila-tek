@@ -1,12 +1,13 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { inventoryService } from '@/components/inventory/inventory.service';
-import { productInput } from "@avila-tek/models";
+import { ProductInput } from "@avila-tek/models";
+import { ProductUpdate } from '@/types/types';
 
 async function createProduct(
-  request: FastifyRequest<{ Body: productInput }>,
+  request: FastifyRequest<{ Body: ProductInput }>,
   reply: FastifyReply
 ) {
-  return inventoryService.createProduct(request.body as productInput, reply);
+  return inventoryService.createProduct(request.body as ProductInput, reply);
 }
 
 async function deleteProduct(
@@ -17,10 +18,10 @@ async function deleteProduct(
 }
 
 async function updateProduct(
-  request: FastifyRequest<{ Params: { id: string }; Body: any }>,
+  request: FastifyRequest<{ Params: { id: string }; Body: ProductUpdate }>,
   reply: FastifyReply
 ) {
-  return inventoryService.updateProduct(request.params.id, request.body as any, reply);
+  return inventoryService.updateProduct(request.params.id, request.body as ProductUpdate, reply);
 }
 
 async function findProduct(

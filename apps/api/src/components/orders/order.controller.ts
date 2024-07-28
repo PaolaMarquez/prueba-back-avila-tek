@@ -38,10 +38,26 @@ async function findAllOrders(
   return orderService.findAllOrders(reply);
 }
 
+async function findOrdersByUsers(
+  request: FastifyRequest<{ Params: {id: string} }>,
+  reply: FastifyReply
+) {
+  return orderService.findOrdersByUsers(request.params.id as string, reply);
+}
+
+async function findOrdersByStatus(
+  request: FastifyRequest<{ Body: {status: OrderStatus} }>,
+  reply: FastifyReply
+) {
+  return orderService.findOrdersByStatus(request.body.status as OrderStatus, reply);
+}
+
 export const orderController = Object.freeze({ 
     createOrder,
     deleteOrder,
     updateStatus,
     findOrder,
-    findAllOrders
+    findAllOrders,
+    findOrdersByUsers,
+    findOrdersByStatus
   });
