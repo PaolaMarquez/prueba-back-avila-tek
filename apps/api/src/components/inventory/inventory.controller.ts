@@ -32,10 +32,10 @@ async function findProduct(
 }
 
 async function findAllProducts(
-  request: FastifyRequest,
+  request: FastifyRequest<{Params: {limit?: string, page?: string}}>,
   reply: FastifyReply
 ) {
-  return inventoryService.findAllProducts(reply);
+  return inventoryService.findAllProducts(reply, request.params.limit, request.params.page);
 }
 
 async function findAvailableProducts(

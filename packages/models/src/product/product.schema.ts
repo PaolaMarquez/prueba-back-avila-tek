@@ -1,12 +1,20 @@
 import type { z } from 'zod';
 import { Schema, type Types, type Document } from 'mongoose';
 import { productDefinition } from './product.dto';
+import { mongoosePagination, Pagination } from "mongoose-paginate-ts";
 
 export type IProduct = z.infer<typeof productDefinition>;
 
-export type ProductDocument = IProduct & Document<Types.ObjectId, any, IProduct>;
+export type ProductDocument = IProduct & Document<Types.ObjectId, any, IProduct> & Pagination<IProduct>;
 
-export const productSchema = new Schema<IProduct, ProductDocument>(
+export type ProductSchemaType = {
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+};
+
+export const productSchema = new Schema<ProductSchemaType>(
   {
     name: {
       type: String,
@@ -31,3 +39,5 @@ export const productSchema = new Schema<IProduct, ProductDocument>(
   },
   { timestamps: true }
 );
+
+productSchema.plugin(mongoosePagination)

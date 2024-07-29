@@ -70,10 +70,16 @@ async function findProduct(id: string, res: FastifyReply){
   }
 }
 
-async function findAllProducts(res: FastifyReply){
+async function findAllProducts(res: FastifyReply, limit?: string, page?: string){
   try {
-    const products = await Product.find()
-    if (products.length === 0){
+    const options = {
+      query: {},
+      limit: limit? parseInt(limit): 10,
+      page: page? parseInt(page): 1
+    };
+    // const products = await Product.find()
+    const products = await Product.paginate(options)
+    if (products?.totalDocs === 0){
       res.status(400).send("There are no products registered")
     }
     return products
@@ -84,8 +90,11 @@ async function findAllProducts(res: FastifyReply){
 
 async function findAvailableProducts(res: FastifyReply){
   try {
-    const products = await Product.find({ stock: { $gt: 0 } })
-    if (products.length === 0){
+    // const products = await Product.find({ stock: { $gt: 0 } })
+    const products = await Product.paginate({
+      query: { stock: { $gt: 0 } }
+    })
+    if (products?.totalDocs === 0){
       res.status(400).send("There are no products available")
     }
     return products

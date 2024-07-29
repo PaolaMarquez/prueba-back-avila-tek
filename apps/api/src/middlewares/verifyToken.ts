@@ -33,20 +33,6 @@ async function verifyTokenAndAuthorization(request: FastifyRequest<{ Body: any ,
     }
 }
 
-// async function verifyTokenAndOwnership(request: FastifyRequest<{ Body: any, Params: { id: string , userId: string } }>, reply: FastifyReply){
-//     await verifyToken(request, reply)
-//     try {
-//         const user = request.user
-//         if (user.isAdmin || user._id === request.params.userId) {
-//             return;
-//           } else {
-//             return reply.code(401).send({ error: "Unauthorized" })
-//           }
-//     } catch (error) {
-//         return reply.code(500).send({ error: "Server error" })
-//     }
-// }
-
 export const verifyMidd = Object.freeze({
     verifyToken,
     verifyTokenAndAuthorization
