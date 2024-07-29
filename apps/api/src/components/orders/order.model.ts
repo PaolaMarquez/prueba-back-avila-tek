@@ -1,6 +1,5 @@
 import { model } from 'mongoose';
-import { itemSchema, orderSchema } from '@avila-tek/models';
+import { OrderDocument, orderSchema, OrderSchemaType } from '@avila-tek/models';
+import { mongoosePagination, Pagination } from "mongoose-paginate-ts";
 
-
-export const Item = model('Item', itemSchema);
-export const Order = model('Order', orderSchema);
+export const Order = model<OrderSchemaType, Pagination<OrderSchemaType>>('Order', orderSchema);

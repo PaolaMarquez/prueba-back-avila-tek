@@ -32,24 +32,24 @@ async function findOrder(
 }
 
 async function findAllOrders(
-  request: FastifyRequest,
+  request: FastifyRequest<{ Querystring: {page?: string, limit?: string} }>,
   reply: FastifyReply
 ) {
-  return orderService.findAllOrders(reply);
+  return orderService.findAllOrders(reply, request.query.limit, request.query.page);
 }
 
 async function findOrdersByUsers(
-  request: FastifyRequest<{ Params: {id: string} }>,
+  request: FastifyRequest<{ Params: {id: string}, Querystring: {page?: string, limit?: string} }>,
   reply: FastifyReply
 ) {
-  return orderService.findOrdersByUsers(request.params.id as string, reply);
+  return orderService.findOrdersByUsers(request.params.id as string, reply, request.query.limit, request.query.page);
 }
 
 async function findOrdersByStatus(
-  request: FastifyRequest<{ Body: {status: OrderStatus} }>,
+  request: FastifyRequest<{ Body: {status: OrderStatus}, Querystring: {page?: string, limit?: string}  }>,
   reply: FastifyReply
 ) {
-  return orderService.findOrdersByStatus(request.body.status as OrderStatus, reply);
+  return orderService.findOrdersByStatus(request.body.status as OrderStatus, reply, request.query.limit, request.query.page);
 }
 
 export const orderController = Object.freeze({ 

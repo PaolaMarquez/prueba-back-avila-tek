@@ -9,4 +9,4 @@ export const itemDefinition = z.object({
   updatedAt: z.string().datetime().or(z.date()).nullable().optional(),
 });
 
-export type itemInput = z.infer<typeof itemDefinition>;
+export type TItem = z.infer<typeof itemDefinition>;

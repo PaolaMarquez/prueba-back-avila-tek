@@ -32,17 +32,17 @@ async function findProduct(
 }
 
 async function findAllProducts(
-  request: FastifyRequest<{Params: {limit?: string, page?: string}}>,
+  request: FastifyRequest<{ Querystring: {page?: string, limit?: string} }>,
   reply: FastifyReply
 ) {
-  return inventoryService.findAllProducts(reply, request.params.limit, request.params.page);
+  return inventoryService.findAllProducts(reply, request.query.limit, request.query.page);
 }
 
 async function findAvailableProducts(
-  request: FastifyRequest,
+  request: FastifyRequest<{ Querystring: {page?: string, limit?: string} }>,
   reply: FastifyReply
 ) {
-  return inventoryService.findAvailableProducts(reply);
+  return inventoryService.findAvailableProducts(reply, request.query.limit, request.query.page);
 }
 
 export const inventoryController = Object.freeze({ 

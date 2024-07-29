@@ -19,7 +19,7 @@ async function verifyToken(request: FastifyRequest<{ Body: any , Params: any}>, 
     }
 }
 
-async function verifyTokenAndAuthorization(request: FastifyRequest<{ Body: any , Params: { id: string, userId?: string}}>, reply: FastifyReply){
+async function verifyTokenAndAuthorization(request: FastifyRequest<{ Body: any , Params: { id: string, userId?: string}, Querystring: any}>, reply: FastifyReply){
     await verifyToken(request, reply)
     try {
         const user = request.user

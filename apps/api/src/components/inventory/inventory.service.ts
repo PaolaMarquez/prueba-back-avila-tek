@@ -88,12 +88,14 @@ async function findAllProducts(res: FastifyReply, limit?: string, page?: string)
   }
 }
 
-async function findAvailableProducts(res: FastifyReply){
+async function findAvailableProducts(res: FastifyReply, limit?: string, page?: string){
   try {
-    // const products = await Product.find({ stock: { $gt: 0 } })
-    const products = await Product.paginate({
-      query: { stock: { $gt: 0 } }
-    })
+    const options = {
+      query: { stock: { $gt: 0 } },
+      limit: limit? parseInt(limit): 10,
+      page: page? parseInt(page): 1
+    };
+    const products = await Product.paginate(options)
     if (products?.totalDocs === 0){
       res.status(400).send("There are no products available")
     }
