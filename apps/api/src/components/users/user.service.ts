@@ -6,7 +6,7 @@ async function findOne(args: any, res: FastifyReply, req: FastifyRequest) {
   try {
     const user = await User.findOne({ ...args })
     if (!user){
-      throw { status: 404, type: 'user' };
+      throw { message: '404-user' }
     }
     return{
       user
@@ -20,7 +20,7 @@ async function findAll(args: any, res: FastifyReply, req: FastifyRequest) {
   try {
     const users = await User.find({ ...args })
     if (!users || users.length === 0){
-      throw { status: 404, type: 'user' };
+      throw { message: '404-user' }
     }
     return{
       users

@@ -35,14 +35,14 @@ async function findAllProducts(
   request: FastifyRequest<{ Querystring: {page?: string, limit?: string} , Body: any}>,
   reply: FastifyReply
 ) {
-  return inventoryService.findAllProducts(reply, request.query.limit, request.query.page, request.body);
+  return inventoryService.findAllProducts(reply, request, request.query.limit, request.query.page, request.body);
 }
 
 async function findAvailableProducts(
   request: FastifyRequest<{ Querystring: {page?: string, limit?: string} }>,
   reply: FastifyReply
 ) {
-  return inventoryService.findAllProducts(reply, request.query.limit, request.query.page, { stock: { $gt: 0 } });
+  return inventoryService.findAllProducts(reply, request, request.query.limit, request.query.page, { stock: { $gt: 0 } });
 }
 
 export const inventoryController = Object.freeze({ 

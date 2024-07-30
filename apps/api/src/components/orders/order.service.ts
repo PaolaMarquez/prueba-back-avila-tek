@@ -36,20 +36,20 @@ async function findAllOrders(res: FastifyReply, req: FastifyRequest, limit?: str
 }
 
 async function updateStatus(id: string, status: OrderStatus, res: FastifyReply, req: FastifyRequest){
-  return crudService.updateEntity({Entity:Order, res, id, update: {"status": status}, req});
+  return crudService.updateEntity({Entity:Order, res, id, data:{"status": status}, req});
 }
 
 async function findOrdersByUsers(id:string, res: FastifyReply, req: FastifyRequest, limit?: string, page?: string){
   try {
     const user = User.findById(id);
-    if (!user) res.status(400).send({error: "This user doesn't exist"});
+    if (!user) throw { message: '404-user' }
     const options = {
       query: {user: id},
       limit: limit? parseInt(limit): 10,
       page: page? parseInt(page): 1
     };
     const orders = await Order.paginate(options)
-    if (!orders) throw { status: 404, type: 'default' };
+    if (!orders) throw { message: '404-results' };
     return orders;
   } catch (error) {
     handleError(error as Error, req, res)
@@ -64,7 +64,7 @@ async function findOrdersByStatus(status: OrderStatus, res: FastifyReply, req: F
       page: page? parseInt(page): 1
     };
     const orders = await Order.paginate(options)
-    if (!orders) throw { status: 404, type: 'default' };
+    if (!orders) throw { message: '404-results' };
     return orders;
   } catch (error) {
     handleError(error as Error, req, res)

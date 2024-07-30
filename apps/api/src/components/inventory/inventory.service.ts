@@ -3,18 +3,19 @@ import { Product } from '@/components/inventory/inventory.model';
 import { ProductInput } from "@avila-tek/models";
 import { ProductUpdate } from "@/types/types";
 import { crudService } from "@/components/crud/crud.service";
+import { handleError } from "@/utils/error/handler";
 
 
 async function createProduct(data: ProductInput, res: FastifyReply, req: FastifyRequest){
-    try {
-      let product = await Product.findOne({name: data.name})
-      if (product){
-        return res.status(400).send({error: "Product already exists"});
-      }
-      return crudService.createEntity({Entity:Product, data, res, req })
-    } catch (error) {
-      res.status(500).send({error: "Server error"});
+  try {
+    let product = await Product.findOne({name: data.name})
+    if (product){
+      throw { message: '409-productAlreadyExists' }
     }
+    return crudService.createEntity({Entity:Product, data, res, req })
+  } catch (error) {
+    handleError(error, req, res)
+  }
 }
 
 async function deleteProduct(id: string, res: FastifyReply, req: FastifyRequest){
@@ -22,14 +23,14 @@ async function deleteProduct(id: string, res: FastifyReply, req: FastifyRequest)
 }
 
 async function updateProduct(id: string, data: ProductUpdate, res: FastifyReply, req: FastifyRequest){
-  return crudService.updateEntity({Entity:Product, res, id, update: data, req})
+  return crudService.updateEntity({Entity:Product, res, id, data, req})
 }
 
 async function findProduct(id: string, res: FastifyReply, req: FastifyRequest){
   return crudService.findEntity({Entity:Product, res, id, req})
 }
 
-async function findAllProducts(res: FastifyReply, limit?: string, page?: string, query?: any){
+async function findAllProducts(res: FastifyReply, req: FastifyRequest, limit?: string, page?: string, query?: any){
   try {
     const options = {
       query: query || {},
@@ -38,11 +39,11 @@ async function findAllProducts(res: FastifyReply, limit?: string, page?: string,
     };
     const products = await Product.paginate(options)
     if (products?.totalDocs === 0){
-      throw { status: 404, type: 'default' };
+      throw { message: '404-results' };
       }
     return products
   } catch (error) {
-    res.status(500).send({error: "Server error"});
+      handleError(error, req, res)
   }
 }
 

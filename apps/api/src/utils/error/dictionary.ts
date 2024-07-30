@@ -3,6 +3,20 @@ export const errorTitleDictionary: {
     [type: string]: { [lang: string]: string };
   };
 } = {
+  200:{
+    default: {
+      en: 'Successful',
+      es: 'Realizado correctamente'
+    },
+    delete: {
+      en: 'Deleted successfully',
+      es: 'Eliminado correctamente'
+    },
+    update: {
+      en: 'Updated successfully',
+      es: 'Actualizado correctamente'
+    }
+  },
   400: {
     default: {
       en: 'Bad request',
@@ -26,6 +40,10 @@ export const errorTitleDictionary: {
       en: 'Valid token most be provided',
       es: 'Debe proporcionar un token válido',
     },
+    credentials: {
+      en: 'Invalid credentials',
+      es: 'Credenciales inválidas',
+    }
   },
   403: {
     default: {
@@ -42,6 +60,10 @@ export const errorTitleDictionary: {
       en: 'User not found',
       es: 'Usuario no encontrado',
     },
+    results: {
+      en: 'No results found',
+      es: 'No se encontraron resultados'
+    }
   },
   409: {
     default: {
@@ -55,6 +77,10 @@ export const errorTitleDictionary: {
     emailAlreadyExists: {
       en: 'This email is already registered',
       es: 'Este correo ya está registrado',
+    },
+    productAlreadyExists: {
+      en: 'This product is already registered',
+      es: 'Este producto ya está registrado',
     },
   },
   500: {

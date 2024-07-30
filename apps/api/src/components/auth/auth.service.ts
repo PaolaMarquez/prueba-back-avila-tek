@@ -25,7 +25,7 @@ async function register(data: TSignInInput, res: FastifyReply, req: FastifyReque
   try {
     let user = await User.findOne({email: data.email})
     if (user){
-      return res.status(400).send({error: "User already exists"});
+      throw {message: '409-emailAlreadyExists'}
     }
 
     user = new User(
@@ -38,18 +38,18 @@ async function register(data: TSignInInput, res: FastifyReply, req: FastifyReque
         isAdmin: data.isAdmin
       }
     )
-  const newUser = await user.save();
+    const newUser = await user.save();
 
-  const payload = {
-    user: {
-      _id: newUser._id,
-      isAdmin: newUser.isAdmin,
+    const payload = {
+      user: {
+        _id: newUser._id,
+        isAdmin: newUser.isAdmin,
+      }
     }
-  }
 
-  const token = jwt.sign(payload, process.env.JWT_SECRET!, {
-    expiresIn: "1hr",
-  });
+    const token = jwt.sign(payload, process.env.JWT_SECRET!, {
+      expiresIn: "1hr",
+    });
 
     return {
         user,
@@ -65,11 +65,11 @@ async function login(data: TSignInInput, res: FastifyReply, req: FastifyRequest)
   try {
     const user = await User.findOne({email: data.email})
     if (!user){
-      return res.status(400).send({error: "Invalid credentials"});
+      throw {message: '404-user'}
     }
     const isMatch = await argon2.verify(user.password!, data.password);
     if (!isMatch){
-      return res.status(400).send({error: "Invalid credentials"})
+      throw {message: '401-credentials'}
     }
 
     const payload = {

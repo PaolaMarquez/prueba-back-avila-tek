@@ -10,7 +10,7 @@ export interface StandardError {
 }
 
 export function handleError(
-  error: Error,
+  error: any,
   request: FastifyRequest,
   reply: FastifyReply
 ) {

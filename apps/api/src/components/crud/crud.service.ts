@@ -7,12 +7,11 @@ import { OrderStatus, ProductUpdate } from "@/types/types";
 import { handleError } from "@/utils/error/handler";
 
 interface Props{
-    Entity: typeof Order | typeof Product;
+    Entity: any;
     req: FastifyRequest;
     res: FastifyReply;
-    data?: OrderInput | ProductInput;
+    data?: any;
     id?: string;
-    update?: ProductUpdate | {"status": OrderStatus};
     limit?: string;
     page?: string;
     query?: string;
@@ -37,9 +36,9 @@ async function deleteEntity({Entity, res, req, id}: Props){
   try {
       const result = await (Entity as mongoose.Model<any>).findByIdAndDelete(id)
       if (!result){
-        throw { status: 404, type: 'default' };
+        throw { message: '404' };
       }
-      res.status(200).send("Entity deleted successfully");
+      throw { message: '200-delete' };
     } catch (error) {
       handleError(error as Error, req, res)
     }
@@ -49,7 +48,7 @@ async function findEntity({Entity, res, req, id}: Props){
   try {
     const result = await (Entity as mongoose.Model<any>).findById(id)
     if (!result){
-      throw { status: 404, type: 'default' };
+      throw { message: '404' };
     }
     return {
       result
@@ -59,13 +58,15 @@ async function findEntity({Entity, res, req, id}: Props){
   }
 }
 
-async function updateEntity({Entity, res, id, req, update}: Props){
+async function updateEntity({Entity, res, id, req, data}: Props){
   try {
-      const results = await (Entity as mongoose.Model<any>).findByIdAndUpdate(id, update)
+      const results = await (Entity as mongoose.Model<any>).findByIdAndUpdate(id, data)
       if (!results){
-        throw { status: 404, type: 'default' };
+        throw { message: '404' }
       }
-      res.status(200).send("Entity updated successfully");
+      return {
+        results
+      }
     } catch (error) {
         handleError(error as Error, req, res)
     }
