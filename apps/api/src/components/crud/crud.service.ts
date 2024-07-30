@@ -60,7 +60,7 @@ async function findEntity({Entity, res, req, id}: Props){
 
 async function updateEntity({Entity, res, id, req, data}: Props){
   try {
-      const results = await (Entity as mongoose.Model<any>).findByIdAndUpdate(id, data)
+      const results = await (Entity as mongoose.Model<any>).findByIdAndUpdate(id, {...data})
       if (!results){
         throw { message: '404' }
       }

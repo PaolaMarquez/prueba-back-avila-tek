@@ -10,6 +10,6 @@ export async function inventoryRouter(
   fastify.delete('/product/:id', {preHandler: verifyMidd.verifyTokenAndAuthorization }, inventoryController.deleteProduct);
   fastify.put('/product/:id', {preHandler: verifyMidd.verifyTokenAndAuthorization }, inventoryController.updateProduct);
   fastify.get('/product/:id', {preHandler: verifyMidd.verifyToken }, inventoryController.findProduct);
-  fastify.get('/product', {preHandler: verifyMidd.verifyToken }, inventoryController.findAllProducts);
+  fastify.post('/product/all', {preHandler: verifyMidd.verifyToken }, inventoryController.findAllProducts);
   fastify.get('/product/available', {preHandler: verifyMidd.verifyToken }, inventoryController.findAvailableProducts);
 }

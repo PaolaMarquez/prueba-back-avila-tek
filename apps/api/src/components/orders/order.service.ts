@@ -18,10 +18,10 @@ async function findOrder(id: string, res: FastifyReply, req: FastifyRequest){
   return crudService.findEntity({Entity:Order, res, id, req})
 }
 
-async function findAllOrders(res: FastifyReply, req: FastifyRequest, limit?: string, page?: string){
+async function findAllOrders(res: FastifyReply, req: FastifyRequest, limit?: string, page?: string, query?: any){
   try {
     const options = {
-      query: {},
+      query: query || {},
       limit: limit? parseInt(limit): 10,
       page: page? parseInt(page): 1
     };
@@ -36,7 +36,7 @@ async function findAllOrders(res: FastifyReply, req: FastifyRequest, limit?: str
 }
 
 async function updateStatus(id: string, status: OrderStatus, res: FastifyReply, req: FastifyRequest){
-  return crudService.updateEntity({Entity:Order, res, id, data:{"status": status}, req});
+  return crudService.updateEntity({Entity:Order, res, id, data:{...{"status": status}}, req});
 }
 
 async function findOrdersByUsers(id:string, res: FastifyReply, req: FastifyRequest, limit?: string, page?: string){

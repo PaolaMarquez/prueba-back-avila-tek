@@ -32,10 +32,10 @@ async function findOrder(
 }
 
 async function findAllOrders(
-  request: FastifyRequest<{ Querystring: {page?: string, limit?: string} }>,
+  request: FastifyRequest<{ Querystring: {page?: string, limit?: string}, Body: any }>,
   reply: FastifyReply
 ) {
-  return orderService.findAllOrders(reply, request, request.query.limit, request.query.page);
+  return orderService.findAllOrders(reply, request, request.query.limit, request.query.page, request.body);
 }
 
 async function findOrdersByUsers(
