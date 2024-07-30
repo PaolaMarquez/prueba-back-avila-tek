@@ -1,32 +1,32 @@
-import { FastifyReply } from "fastify";
+import { FastifyReply, FastifyRequest } from "fastify";
 import { Product } from '@/components/inventory/inventory.model';
 import { ProductInput } from "@avila-tek/models";
 import { ProductUpdate } from "@/types/types";
 import { crudService } from "@/components/crud/crud.service";
 
 
-async function createProduct(data: ProductInput, res: FastifyReply){
+async function createProduct(data: ProductInput, res: FastifyReply, req: FastifyRequest){
     try {
       let product = await Product.findOne({name: data.name})
       if (product){
         return res.status(400).send({error: "Product already exists"});
       }
-      return crudService.createEntity({Entity:Product, data, res })
+      return crudService.createEntity({Entity:Product, data, res, req })
     } catch (error) {
       res.status(500).send({error: "Server error"});
     }
 }
 
-async function deleteProduct(id: string, res: FastifyReply){
-  return crudService.deleteEntity({Entity:Product, res, id})
+async function deleteProduct(id: string, res: FastifyReply, req: FastifyRequest){
+  return crudService.deleteEntity({Entity:Product, res, id, req})
 }
 
-async function updateProduct(id: string, data: ProductUpdate, res: FastifyReply){
-  return crudService.updateEntity({Entity:Product, res, id, update: data})
+async function updateProduct(id: string, data: ProductUpdate, res: FastifyReply, req: FastifyRequest){
+  return crudService.updateEntity({Entity:Product, res, id, update: data, req})
 }
 
-async function findProduct(id: string, res: FastifyReply){
-  return crudService.findEntity({Entity:Product, res, id})
+async function findProduct(id: string, res: FastifyReply, req: FastifyRequest){
+  return crudService.findEntity({Entity:Product, res, id, req})
 }
 
 async function findAllProducts(res: FastifyReply, limit?: string, page?: string, query?: any){
@@ -38,8 +38,8 @@ async function findAllProducts(res: FastifyReply, limit?: string, page?: string,
     };
     const products = await Product.paginate(options)
     if (products?.totalDocs === 0){
-      res.status(400).send("There are no products registered")
-    }
+      throw { status: 404, type: 'default' };
+      }
     return products
   } catch (error) {
     res.status(500).send({error: "Server error"});

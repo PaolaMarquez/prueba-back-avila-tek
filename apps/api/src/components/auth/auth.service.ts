@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken';
 import { TSignInInput } from './auth.dto';
 import { User } from '../users/user.model';
-import { FastifyReply } from 'fastify';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import argon2 from 'argon2';
+import { handleError } from '@/utils/error/handler';
 
 /**
  * @async
@@ -20,7 +21,7 @@ import argon2 from 'argon2';
  * @version 1
  */
 
-async function register(data: TSignInInput, res: FastifyReply){
+async function register(data: TSignInInput, res: FastifyReply, req: FastifyRequest){
   try {
     let user = await User.findOne({email: data.email})
     if (user){
@@ -56,11 +57,11 @@ async function register(data: TSignInInput, res: FastifyReply){
       };
 
   } catch (error) {
-    res.status(500).send({error: "Server error"});
+    handleError(error as Error, req, res)
   }
 }
 
-async function login(data: TSignInInput, res: FastifyReply){
+async function login(data: TSignInInput, res: FastifyReply, req: FastifyRequest){
   try {
     const user = await User.findOne({email: data.email})
     if (!user){
@@ -88,7 +89,7 @@ async function login(data: TSignInInput, res: FastifyReply){
     }
 
   } catch (error) {
-    res.status(500).send({error: "Server error"});
+    handleError(error as Error, req, res)
   }
   
 }

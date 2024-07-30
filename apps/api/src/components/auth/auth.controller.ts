@@ -6,13 +6,13 @@ async function register(
   request: FastifyRequest<{ Body: TSignInInput }>,
   reply: FastifyReply
 ) {
-  return authService.register(request.body as TSignInInput, reply);
+  return authService.register(request.body as TSignInInput, reply, request);
 }
 async function login(
   request: FastifyRequest<{ Body: TSignInInput }>,
   reply: FastifyReply
 ) {
-  return authService.login(request.body as TSignInInput, reply);
+  return authService.login(request.body as TSignInInput, reply, request);
 }
 
 export const authController = Object.freeze({ register, login});

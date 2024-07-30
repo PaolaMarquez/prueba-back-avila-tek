@@ -7,28 +7,28 @@ async function createProduct(
   request: FastifyRequest<{ Body: ProductInput }>,
   reply: FastifyReply
 ) {
-  return inventoryService.createProduct(request.body as ProductInput, reply);
+  return inventoryService.createProduct(request.body as ProductInput, reply, request);
 }
 
 async function deleteProduct(
   request: FastifyRequest<{ Params: { id: string } }>,
   reply: FastifyReply
 ) {
-  return inventoryService.deleteProduct(request.params.id, reply);
+  return inventoryService.deleteProduct(request.params.id, reply, request);
 }
 
 async function updateProduct(
   request: FastifyRequest<{ Params: { id: string }; Body: ProductUpdate }>,
   reply: FastifyReply
 ) {
-  return inventoryService.updateProduct(request.params.id, request.body as ProductUpdate, reply);
+  return inventoryService.updateProduct(request.params.id, request.body as ProductUpdate, reply, request);
 }
 
 async function findProduct(
   request: FastifyRequest<{ Params: { id: string }}>,
   reply: FastifyReply
 ) {
-  return inventoryService.findProduct(request.params.id, reply);
+  return inventoryService.findProduct(request.params.id, reply, request);
 }
 
 async function findAllProducts(
