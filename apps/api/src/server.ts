@@ -11,7 +11,6 @@ import { swaggerPlugin } from './plugins/swagger';
 import { handleError } from './utils/error/handler';
 import { authRouter } from '@/components/auth/auth.routes';
 import { userRouter } from '@/components/users/user.routes';
-import { verifyMidd } from '@/middlewares/verifyToken';
 import { inventoryRouter } from '@/components/inventory/inventory.routes';
 import { orderRouter } from '@/components/orders/order.routes';
 
@@ -74,6 +73,12 @@ export async function createServer() {
   });
 
   server.setErrorHandler(handleError);
+
+  // welcome!
+  server.get('/', async (request: FastifyRequest, reply: FastifyReply) => {
+    const welcome = "This is the main page!\nCheck out the routes documentation here https://prueba-back-avila-tek.onrender.com/api/docs/static/index.html to start :)"
+    return welcome
+  });
 
   // routes
 
