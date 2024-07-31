@@ -46,7 +46,7 @@ async function findAllOrders(res: FastifyReply, req: FastifyRequest, limit?: str
     };
     const orders = await Order.paginate(options)
     if (orders?.totalDocs === 0){
-      throw { status: 404, type: 'default' };
+      throw { message: '404-results' };
     }
     return orders
   } catch (error) {
@@ -73,7 +73,6 @@ async function updateStatus(id: string, status: OrderStatus, res: FastifyReply, 
  * @param {string} [page] - Optional page number to return.
  * @returns {Promise<object>} Object containing the list of orders and pagination metadata.
  * @throws {Error} If the user is not found.
- * @throws {Error} If no orders are found for the user.
  * @example
  * const orders = await findOrdersByUsers('1234567890', res, req, '10', '1');
  */
@@ -82,48 +81,7 @@ async function findOrdersByUsers(id:string, res: FastifyReply, req: FastifyReque
   try {
     const user = User.findById(id);
     if (!user) throw { message: '404-user' }
-    const options = {
-      query: {user: id},
-      limit: limit? parseInt(limit): 10,
-      page: page? parseInt(page): 1
-    };
-    const orders = await Order.paginate(options)
-    if (!orders) throw { message: '404-results' };
-    return orders;
-  } catch (error) {
-    handleError(error as Error, req, res)
-  }
-}
-
-/**
- * @async
- * @function findOrdersByStatus
- * @description Retrieves a list of orders by status with pagination.
- * @summary Finds orders by status.
- * @since 1.0.0
- * @version 1.0.0
- * @listens order.controller:findOrdersByStatus
- * @param {OrderStatus} status - Status of the orders to retrieve (e.g. 'pending', 'shipped', etc.).
- * @param {FastifyReply} res - HTTP response object.
- * @param {FastifyRequest} req - HTTP request object.
- * @param {string} [limit] - Optional limit of orders to return.
- * @param {string} [page] - Optional page number to return.
- * @returns {Promise<object>} Object containing the list of orders and pagination metadata.
- * @throws {Error} If no orders are found with the specified status.
- * @example
- * const orders = await findOrdersByStatus('pending', res, req, '10', '1');
- */
-
-async function findOrdersByStatus(status: OrderStatus, res: FastifyReply, req: FastifyRequest, limit?: string, page?: string){
-  try {
-    const options = {
-      query: {status},
-      limit: limit? parseInt(limit): 10,
-      page: page? parseInt(page): 1
-    };
-    const orders = await Order.paginate(options)
-    if (!orders) throw { message: '404-results' };
-    return orders;
+    return findAllOrders(res, req, limit, page, {user: id})
   } catch (error) {
     handleError(error as Error, req, res)
   }
@@ -136,5 +94,4 @@ export const orderService = Object.freeze({
     findAllOrders,
     updateStatus,
     findOrdersByUsers,
-    findOrdersByStatus,
   });

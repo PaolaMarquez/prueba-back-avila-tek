@@ -49,7 +49,7 @@ async function findOrdersByStatus(
   request: FastifyRequest<{ Body: {status: OrderStatus}, Querystring: {page?: string, limit?: string}  }>,
   reply: FastifyReply
 ) {
-  return orderService.findOrdersByStatus(request.body.status as OrderStatus, reply, request, request.query.limit, request.query.page);
+  return orderService.findAllOrders(reply, request, request.query.limit, request.query.page, {status: request.body.status});
 }
 
 export const orderController = Object.freeze({ 
