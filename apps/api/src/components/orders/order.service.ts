@@ -18,6 +18,25 @@ async function findOrder(id: string, res: FastifyReply, req: FastifyRequest){
   return crudService.findEntity({Entity:Order, res, id, req})
 }
 
+/**
+ * @async
+ * @function findAllOrders
+ * @description Retrieves a list of orders with pagination.
+ * @summary Finds all orders.
+ * @since 1.0.0
+ * @version 1.0.0
+ * @listens order.controller:findAllOrders
+ * @param {FastifyReply} res - HTTP response object.
+ * @param {FastifyRequest} req - HTTP request object.
+ * @param {string} [limit] - Optional limit of orders to return.
+ * @param {string} [page] - Optional page number to return.
+ * @param {object} [query] - Optional query object to filter orders.
+ * @returns {Promise<object>} Object containing the list of orders and pagination metadata.
+ * @throws {Error} If no orders are found.
+ * @example
+ * const orders = await findAllOrders(res, req, '10', '1', { status: 'pending' });
+ */
+
 async function findAllOrders(res: FastifyReply, req: FastifyRequest, limit?: string, page?: string, query?: any){
   try {
     const options = {
@@ -39,6 +58,26 @@ async function updateStatus(id: string, status: OrderStatus, res: FastifyReply, 
   return crudService.updateEntity({Entity:Order, res, id, data:{...{"status": status}}, req});
 }
 
+/**
+ * @async
+ * @function findOrdersByUsers
+ * @description Retrieves a list of orders for a specific user with pagination.
+ * @summary Finds orders by user ID.
+ * @since 1.0.0
+ * @version 1.0.0
+ * @listens order.controller:findOrdersByUsers
+ * @param {string} id - ID of the user to retrieve orders for.
+ * @param {FastifyReply} res - HTTP response object.
+ * @param {FastifyRequest} req - HTTP request object.
+ * @param {string} [limit] - Optional limit of orders to return.
+ * @param {string} [page] - Optional page number to return.
+ * @returns {Promise<object>} Object containing the list of orders and pagination metadata.
+ * @throws {Error} If the user is not found.
+ * @throws {Error} If no orders are found for the user.
+ * @example
+ * const orders = await findOrdersByUsers('1234567890', res, req, '10', '1');
+ */
+
 async function findOrdersByUsers(id:string, res: FastifyReply, req: FastifyRequest, limit?: string, page?: string){
   try {
     const user = User.findById(id);
@@ -55,6 +94,25 @@ async function findOrdersByUsers(id:string, res: FastifyReply, req: FastifyReque
     handleError(error as Error, req, res)
   }
 }
+
+/**
+ * @async
+ * @function findOrdersByStatus
+ * @description Retrieves a list of orders by status with pagination.
+ * @summary Finds orders by status.
+ * @since 1.0.0
+ * @version 1.0.0
+ * @listens order.controller:findOrdersByStatus
+ * @param {OrderStatus} status - Status of the orders to retrieve (e.g. 'pending', 'shipped', etc.).
+ * @param {FastifyReply} res - HTTP response object.
+ * @param {FastifyRequest} req - HTTP request object.
+ * @param {string} [limit] - Optional limit of orders to return.
+ * @param {string} [page] - Optional page number to return.
+ * @returns {Promise<object>} Object containing the list of orders and pagination metadata.
+ * @throws {Error} If no orders are found with the specified status.
+ * @example
+ * const orders = await findOrdersByStatus('pending', res, req, '10', '1');
+ */
 
 async function findOrdersByStatus(status: OrderStatus, res: FastifyReply, req: FastifyRequest, limit?: string, page?: string){
   try {
