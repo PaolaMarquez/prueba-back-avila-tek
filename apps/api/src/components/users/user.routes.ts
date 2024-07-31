@@ -8,5 +8,9 @@ export async function userRouter(
 ) {
   fastify.get('/v1/users/:id', {preHandler: verifyMidd.verifyTokenAndAuthorization }, userController.findOne);
 
-  fastify.get('/v1/users', {preHandler: verifyMidd.verifyTokenAndAuthorization }, userController.findAll);
+  fastify.get('/v1/users', {preHandler: verifyMidd.verifyTokenAndAuthorization,
+    schema: {
+      body: {type: 'object'}
+    }
+   }, userController.findAll);
 }
